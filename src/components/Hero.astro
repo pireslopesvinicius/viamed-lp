@@ -1,0 +1,267 @@
+---
+const slides = [
+  {
+    img: '/images/banner01.jpg',
+    title: 'Sua necessidade é<br/>o nosso <em>desafio.</em>',
+    desc: 'Buscamos a vanguarda na Gestão de Riscos Ocupacionais através do cuidado aos nossos clientes e seus colaboradores.',
+  },
+  {
+    img: '/images/banner02.jpg',
+    title: 'Compromisso com a sua<br/><em>saúde e segurança.</em>',
+    desc: 'Nosso compromisso é atender as suas necessidades promovendo saúde e segurança no ambiente de trabalho.',
+  },
+  {
+    img: '/images/banner03.jpg',
+    title: 'Inovação para atender<br/><em>suas exigências.</em>',
+    desc: 'Inovamos para atender as suas exigências com foco na saúde e segurança dos seus colaboradores.',
+  },
+];
+
+const pills = [
+  { icon: 'fa-building',      value: '500+',    label: 'empresas atendidas' },
+  { icon: 'fa-award',         value: '10+ anos', label: 'de experiência' },
+  { icon: 'fa-shield-halved', value: '100%',     label: 'conformidade legal' },
+];
+---
+
+<div class="hero-outer" id="inicio">
+  <div class="hero-card">
+
+    <div class="hero-bg">
+      <img src={slides[0].img} id="heroBgImg" alt="" width="1440" height="800" loading="eager" fetchpriority="high" />
+    </div>
+    <div class="hero-noise" aria-hidden="true"></div>
+
+    <!-- Topbar inside card (desktop) -->
+    <div class="hero-topbar">
+      <div class="htl">
+        <a href="tel:+552120428680"><i class="fa-solid fa-phone"></i> (21) 2042-8680</a>
+        <a href="mailto:comercial@viamedmultisaude.com.br"><i class="fa-solid fa-envelope"></i> comercial@viamedmultisaude.com.br</a>
+      </div>
+      <div class="htr">
+        <a href="https://wa.me/552120428680" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://www.facebook.com/ViaMedMultisaude/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/viamedmultisaude/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+
+    <div class="hero-body">
+      <div class="hero-left">
+        <div class="h-eyebrow"><span></span> Gestão de Riscos Ocupacionais</div>
+        <h1 class="hero-title" id="hTitle" set:html={slides[0].title} />
+        <p class="hero-desc" id="hDesc">{slides[0].desc}</p>
+        <div class="hero-btns">
+          <a href="#servicos" class="btn btn-secondary btn-lg">Nossos Serviços <i class="fa-solid fa-arrow-right arr"></i></a>
+          <a href="#contato"  class="btn btn-ghost    btn-lg">Fale Conosco</a>
+        </div>
+      </div>
+
+      <div class="hero-pills" aria-hidden="true">
+        {pills.map(p => (
+          <div class="pill">
+            <div class="pill-ic"><i class={`fa-solid ${p.icon}`}></i></div>
+            <div><strong>{p.value}</strong><span>{p.label}</span></div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="scroll-hint"><div class="scroll-line"></div>Scroll</div>
+    <div class="hero-controls">
+      <div class="hdots" id="hdots"></div>
+      <div class="harrows">
+        <button id="hPrev" aria-label="Slide anterior"><i class="fa-solid fa-chevron-left"></i></button>
+        <button id="hNext" aria-label="Próximo slide"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Slide data passed to client script -->
+<script is:inline define:vars={{ slides }}>
+(function(){
+  let cur = 0, timer, transitioning = false;
+  const bgImg   = document.getElementById('heroBgImg');
+  const titleEl = document.getElementById('hTitle');
+  const descEl  = document.getElementById('hDesc');
+  const dotsW   = document.getElementById('hdots');
+
+  slides.forEach((_, i) => {
+    const b = document.createElement('button');
+    if (i === 0) b.classList.add('on');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', () => go(i));
+    dotsW.appendChild(b);
+  });
+  const dots = dotsW.querySelectorAll('button');
+
+  function go(n) {
+    if (transitioning) return;
+    transitioning = true;
+    cur = (n + slides.length) % slides.length;
+    dots.forEach((d, i) => d.classList.toggle('on', i === cur));
+
+    bgImg.style.transition = 'opacity .5s ease';
+    bgImg.style.opacity = '0';
+    titleEl.style.transition = 'opacity .3s, transform .3s';
+    titleEl.style.opacity = '0';
+    titleEl.style.transform = 'translateY(16px)';
+    descEl.style.transition = 'opacity .3s';
+    descEl.style.opacity = '0';
+
+    setTimeout(() => {
+      bgImg.src = slides[cur].img;
+      bgImg.style.transition = 'opacity .9s ease, transform 12s ease';
+      bgImg.style.opacity = '1';
+      bgImg.style.transform = 'scale(1.08)';
+      setTimeout(() => { bgImg.style.transform = 'scale(1)'; }, 50);
+
+      titleEl.innerHTML = slides[cur].title;
+      titleEl.style.transition = 'opacity .7s ease, transform .7s ease';
+      titleEl.style.opacity = '1';
+      titleEl.style.transform = 'none';
+
+      descEl.textContent = slides[cur].desc;
+      descEl.style.transition = 'opacity .7s ease .15s';
+      descEl.style.opacity = '1';
+
+      transitioning = false;
+    }, 350);
+
+    clearInterval(timer);
+    timer = setInterval(() => go(cur + 1), 7500);
+  }
+
+  document.getElementById('hNext').addEventListener('click', () => go(cur + 1));
+  document.getElementById('hPrev').addEventListener('click', () => go(cur - 1));
+  timer = setInterval(() => go(cur + 1), 7500);
+})();
+</script>
+
+<style>
+.hero-outer { padding:20px 24px 0 }
+.hero-card {
+  position:relative; border-radius:var(--r3xl); overflow:hidden;
+  min-height:92vh; display:flex; flex-direction:column; background:var(--n900);
+}
+.hero-bg { position:absolute; inset:0; overflow:hidden }
+.hero-bg img {
+  width:100%; height:100%; object-fit:cover; object-position:center 20%;
+  animation:kenBurns 14s ease-in-out alternate infinite; transform-origin:center;
+}
+.hero-bg::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(118deg, rgba(0,10,69,.90) 0%, rgba(0,17,103,.75) 38%, rgba(0,17,103,.45) 65%, rgba(0,10,40,.20) 100%);
+}
+.hero-noise {
+  position:absolute; inset:0; z-index:1; opacity:.04; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.hero-topbar {
+  position:relative; z-index:5;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:20px 48px; border-bottom:1px solid rgba(255,255,255,.08);
+}
+.htl { display:flex; align-items:center; gap:28px }
+.htl a { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.72); font-size:13.5px; transition:.2s }
+.htl a:hover { color:#fff }
+.htr { display:flex; gap:8px }
+.htr a {
+  width:34px; height:34px; border-radius:50%;
+  background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.75); display:grid; place-items:center; font-size:14px; transition:.2s;
+}
+.htr a:hover { background:var(--o500); border-color:var(--o500); color:#fff; transform:scale(1.1) }
+.hero-body {
+  position:relative; z-index:4; flex:1;
+  display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;
+  padding:60px 48px 80px;
+}
+.h-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(244,97,10,.22); backdrop-filter:blur(10px);
+  border:1px solid rgba(244,97,10,.38); color:#fff;
+  font-size:11.5px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase;
+  padding:7px 18px; border-radius:var(--rfull); margin-bottom:28px;
+  animation:fadeUp .8s var(--ease) .2s both;
+}
+.h-eyebrow span { width:6px; height:6px; border-radius:50%; background:var(--o500) }
+.hero-title {
+  font-size:clamp(38px,5.2vw,68px); font-weight:900; line-height:1.04;
+  letter-spacing:-2.5px; color:#fff; margin-bottom:24px;
+  animation:fadeUp .9s var(--ease) .4s both;
+}
+.hero-title :global(em) { font-style:normal; color:var(--o400) }
+.hero-desc {
+  font-size:clamp(15px,1.6vw,18.5px); line-height:1.78;
+  color:rgba(255,255,255,.80); margin-bottom:38px; max-width:520px;
+  animation:fadeUp .9s var(--ease) .6s both;
+}
+.hero-btns { display:flex; gap:14px; flex-wrap:wrap; animation:fadeUp .9s var(--ease) .8s both }
+.hero-pills { display:flex; flex-direction:column; gap:16px; animation:fadeRight 1s var(--ease) .9s both }
+.pill {
+  display:flex; align-items:center; gap:16px;
+  background:rgba(255,255,255,.09); backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.14); border-radius:var(--r2xl); padding:18px 22px; transition:.3s;
+}
+.pill:hover { background:rgba(255,255,255,.14); transform:translateX(-4px) }
+.pill-ic {
+  width:48px; height:48px; border-radius:var(--rlg); flex-shrink:0;
+  background:rgba(244,97,10,.25); color:var(--o400);
+  display:grid; place-items:center; font-size:20px; transition:.3s;
+}
+.pill:hover .pill-ic { background:var(--o500); color:#fff; transform:rotate(-8deg) scale(1.1) }
+.pill strong { font-family:var(--fh); font-size:24px; font-weight:800; color:#fff; display:block; line-height:1 }
+.pill span { font-size:12px; color:rgba(255,255,255,.58) }
+.hero-controls {
+  position:absolute; bottom:28px; width:100%;
+  display:flex; align-items:center; justify-content:center; gap:40px;
+  z-index:5; padding:0 48px;
+}
+.hdots { display:flex; gap:8px }
+.hdots :global(button) {
+  width:8px; height:8px; border-radius:50%; border:none;
+  background:rgba(255,255,255,.35); cursor:pointer; transition:.35s;
+}
+.hdots :global(button.on) { background:#fff; width:26px; border-radius:4px }
+.harrows { display:flex; gap:10px; position:absolute; right:48px; bottom:0 }
+.harrows button {
+  width:42px; height:42px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08);
+  backdrop-filter:blur(8px); color:#fff; display:grid; place-items:center;
+  font-size:15px; cursor:pointer; transition:.25s;
+}
+.harrows button:hover { background:var(--o500); border-color:var(--o500); transform:scale(1.1) }
+.scroll-hint {
+  position:absolute; bottom:32px; left:48px; z-index:5;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  color:rgba(255,255,255,.45); font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+}
+.scroll-line {
+  width:1px; height:44px;
+  background:linear-gradient(to bottom, rgba(255,255,255,.6), transparent);
+  animation:float 2s ease-in-out infinite;
+}
+@media(max-width:1024px) {
+  .hero-body { grid-template-columns:1fr; padding:48px 36px 72px }
+  .hero-pills { display:none }
+}
+@media(max-width:768px) {
+  .hero-outer { padding:12px 14px 0 }
+  .hero-card { min-height:auto; height:92svh; border-radius:24px }
+  .hero-topbar { display:none }
+  .hero-body { padding:32px 24px 80px; align-items:flex-end }
+  .hero-title { font-size:clamp(32px,8vw,48px); letter-spacing:-1.5px }
+  .hero-desc { font-size:15px; margin-bottom:28px; max-width:100% }
+  .hero-btns { flex-direction:column; gap:10px }
+  .hero-btns .btn { width:100%; justify-content:center }
+  .harrows { right:20px }
+  .scroll-hint { display:none }
+  .hero-controls { padding:0 20px; gap:16px }
+}
+@media(max-width:480px) {
+  .hero-card { height:88svh }
+  .hero-title { font-size:30px; letter-spacing:-1px }
+}
+</style>

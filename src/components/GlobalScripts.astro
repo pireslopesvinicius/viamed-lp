@@ -1,0 +1,78 @@
+<!-- Scroll progress bar -->
+<script>
+(function () {
+  // Progress bar
+  const bar = document.getElementById('progress-bar');
+  if (bar) {
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      bar.style.width = Math.min((window.scrollY / (h.scrollHeight - h.clientHeight)) * 100, 100) + '%';
+    }, { passive: true });
+  }
+
+  // Header — sombra ao scrollar (sempre visível, sem animação de esconder)
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header?.classList.toggle('raised', window.scrollY > 10);
+  }, { passive: true });
+
+  // Active nav link
+  const ids = ['inicio','solucoes','sobre','servicos','numeros','equipe','trabalhe','contato'];
+  const links = document.querySelectorAll('.nav-a');
+  window.addEventListener('scroll', () => {
+    let act = ids[0];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= 100) act = id;
+    });
+    links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + act));
+  }, { passive: true });
+
+  // Mobile nav
+  const mobNav = document.getElementById('mobNav');
+  const ham    = document.getElementById('ham');
+  const close  = document.getElementById('mobClose');
+  function openNav()  { mobNav?.classList.add('open'); ham?.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+  function closeNav() { mobNav?.classList.remove('open'); ham?.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+  ham?.addEventListener('click', openNav);
+  close?.addEventListener('click', closeNav);
+  mobNav?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+
+  // Scroll reveal
+  document.querySelectorAll('.stagger-children').forEach(parent => {
+    parent.querySelectorAll('[data-anim]').forEach((child, i) => {
+      if (!(child as HTMLElement).dataset.delay) (child as HTMLElement).dataset.delay = String(Math.min(i + 1, 6));
+    });
+  });
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target as HTMLElement;
+        el.classList.add('visible');
+        revObs.unobserve(el);
+        // Após a animação, remove data-anim para liberar o compositing layer
+        // (transition:transform deixa box-shadow retangular em cards arredondados)
+        const cleanup = () => el.removeAttribute('data-anim');
+        el.addEventListener('transitionend', cleanup, { once: true });
+        setTimeout(cleanup, 1400); // fallback caso transitionend não dispare
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('[data-anim]').forEach(el => revObs.observe(el));
+
+  // Parallax on about image
+  const pImgs = document.querySelectorAll('[data-parallax]');
+  if (pImgs.length) {
+    window.addEventListener('scroll', () => {
+      pImgs.forEach(img => {
+        const frame = (img as HTMLElement).closest('.about-frame');
+        if (!frame) return;
+        const rect = frame.getBoundingClientRect();
+        const factor = parseFloat((img as HTMLElement).dataset.parallax || '0.1');
+        (img as HTMLElement).style.transform = `translateY(${(rect.top + rect.height / 2 - window.innerHeight / 2) * factor}px)`;
+      });
+    }, { passive: true });
+  }
+})();
+</script>

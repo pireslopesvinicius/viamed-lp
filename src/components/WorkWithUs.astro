@@ -1,0 +1,84 @@
+---
+const perks = [
+  { icon: 'fa-briefcase-medical', text: 'Plano de saúde e odontológico' },
+  { icon: 'fa-graduation-cap',    text: 'Treinamento e desenvolvimento contínuo' },
+  { icon: 'fa-chart-line',        text: 'Plano de carreira estruturado' },
+  { icon: 'fa-people-group',      text: 'Ambiente colaborativo e inovador' },
+];
+---
+
+<section class="sec-lg" id="trabalhe" style="background:var(--g50)">
+  <div class="w">
+    <div class="work-grid">
+      <div data-anim="left">
+        <span class="eyebrow">Carreiras</span>
+        <h2>Trabalhe Conosco</h2>
+        <p class="lead" style="margin-bottom:32px">Faça parte de uma equipe comprometida com a vanguarda da proteção à vida do trabalhador.</p>
+        <div class="perks stagger-children">
+          {perks.map(p => (
+            <div class="perk" data-anim="left">
+              <div class="perk-ic"><i class={`fa-solid ${p.icon}`}></i></div>
+              <p>{p.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div data-anim="right">
+      <div class="form-card">
+        <h3>Envie seu currículo</h3>
+        <form id="workForm" novalidate>
+          <div class="frow">
+            <div class="field"><label>Nome completo <span class="req">*</span></label><input class="inp" type="text" required placeholder="Seu nome" /></div>
+            <div class="field"><label>E-mail <span class="req">*</span></label><input class="inp" type="email" required placeholder="seu@email.com" /></div>
+          </div>
+          <div class="frow">
+            <div class="field"><label>Telefone <span class="req">*</span></label><input class="inp" type="tel" required placeholder="(21) 00000-0000" /></div>
+            <div class="field">
+              <label>Área de interesse</label>
+              <select class="sel">
+                <option value="">Selecione...</option>
+                <option>Medicina do Trabalho</option>
+                <option>Engenharia de Segurança</option>
+                <option>Técnico de Segurança</option>
+                <option>Área Administrativa</option>
+                <option>Outra área</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Mensagem</label><textarea class="txa" placeholder="Fale sobre você e sua experiência..."></textarea></div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center">
+            Enviar Currículo <i class="fa-solid fa-paper-plane arr"></i>
+          </button>
+          <div class="form-ok" id="workOk">
+            <i class="fa-solid fa-circle-check" style="margin-right:8px"></i>Currículo recebido! Entraremos em contato.
+          </div>
+        </form>
+      </div><!-- .form-card -->
+      </div><!-- data-anim wrapper -->
+    </div>
+  </div>
+</section>
+
+<script>
+document.getElementById('workForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const form = e.target as HTMLFormElement;
+  if (!form.checkValidity()) { form.reportValidity(); return; }
+  const ok = document.getElementById('workOk');
+  if (ok) { ok.style.display = 'block'; form.reset(); setTimeout(() => ok.style.display = 'none', 7000); }
+});
+</script>
+
+<style>
+.work-grid { display:grid; grid-template-columns:1fr 1.05fr; gap:72px; align-items:start }
+.work-grid h2 { font-size:clamp(28px,3vw,42px); font-weight:700; margin-bottom:16px; letter-spacing:-.5px }
+.perks { display:grid; gap:12px; margin-bottom:32px }
+.perk { display:flex; align-items:center; gap:16px; padding:18px 20px; background:#fff; border-radius:var(--rxl); border:1px solid var(--g200); transition:.3s var(--ease) }
+.perk:hover { border-color:var(--n200); box-shadow:var(--sh-sm); transform:translateX(5px) }
+.perk-ic { width:44px; height:44px; border-radius:var(--rlg); background:var(--n800); color:#fff; display:grid; place-items:center; font-size:18px; flex-shrink:0; transition:.3s var(--spring) }
+.perk:hover .perk-ic { transform:scale(1.15) rotate(-5deg) }
+.perk p { font-size:15px; font-weight:500; color:var(--g800) }
+@media(max-width:1024px) { .work-grid { grid-template-columns:1fr; gap:48px } }
+@media(max-width:768px)  { .work-grid { gap:36px } }
+</style>

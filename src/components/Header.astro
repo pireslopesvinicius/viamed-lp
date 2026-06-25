@@ -1,0 +1,185 @@
+---
+const navLinks = [
+  { href: '#inicio',   label: 'Home' },
+  { href: '#sobre',    label: 'Quem Somos' },
+  { href: '#trabalhe', label: 'Trabalhe Conosco' },
+  { href: '#contato',  label: 'Contato' },
+];
+
+const servicos = [
+  { href: '#servicos', tab: 0, icon: 'fa-shield-halved',  label: 'Segurança e Saúde Ocupacional' },
+  { href: '#servicos', tab: 1, icon: 'fa-anchor',         label: 'Soluções Marítimas e Offshore' },
+  { href: '#servicos', tab: 2, icon: 'fa-laptop-code',    label: 'Gestão de E-Social' },
+  { href: '#servicos', tab: 3, icon: 'fa-virus-slash',    label: 'Prevenção ao Covid-19' },
+];
+---
+
+<header class="header" id="header">
+  <div class="w">
+    <div class="hinner">
+      <a href="#inicio" class="logo">
+        <img src="/images/viamed-multisaude-logo.png" alt="ViaMed Multisaúde" width="210" height="67" />
+      </a>
+
+      <nav aria-label="Menu principal">
+        <ul class="nav-ul">
+          <li><a href="#inicio" class="nav-a on">Home</a></li>
+          <li class="has-drop">
+            <a href="#servicos" class="nav-a">
+              Serviços <i class="fa-solid fa-chevron-down ch"></i>
+            </a>
+            <div class="drop">
+              {servicos.map(s => (
+                <a href={s.href} class="drop-a" data-tab={s.tab}>
+                  <span class="drop-ic"><i class={`fa-solid ${s.icon}`}></i></span>
+                  {s.label}
+                </a>
+              ))}
+            </div>
+          </li>
+          {navLinks.slice(1).map(l => (
+            <li><a href={l.href} class="nav-a">{l.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <a href="#contato" class="btn btn-secondary btn-md">
+        <i class="fa-regular fa-calendar-check"></i> Agendar ASO
+      </a>
+      <button class="ham" id="ham" aria-label="Abrir menu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile nav -->
+<nav class="mob-nav" id="mobNav" aria-label="Menu mobile">
+  <div class="mob-top">
+    <img src="/images/viamed-multisaude-logo.png" alt="ViaMed" width="160" height="51" />
+    <button class="mob-close" id="mobClose" aria-label="Fechar menu">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <div class="mob-links">
+    <a href="#inicio"   class="mob-link">Home <i class="fa-solid fa-chevron-right"></i></a>
+    <a href="#solucoes" class="mob-link">Serviços <i class="fa-solid fa-chevron-right"></i></a>
+    <div class="mob-sub">
+      {servicos.map(s => <a href={s.href}>{s.label}</a>)}
+    </div>
+    <a href="#sobre"    class="mob-link">Quem Somos <i class="fa-solid fa-chevron-right"></i></a>
+    <a href="#equipe"   class="mob-link">Nossa Equipe <i class="fa-solid fa-chevron-right"></i></a>
+    <a href="#trabalhe" class="mob-link">Trabalhe Conosco <i class="fa-solid fa-chevron-right"></i></a>
+    <a href="#contato"  class="mob-link">Contato <i class="fa-solid fa-chevron-right"></i></a>
+  </div>
+  <div class="mob-footer">
+    <a href="#contato" class="btn btn-secondary btn-lg" style="justify-content:center;border-radius:14px">
+      <i class="fa-regular fa-calendar-check"></i> Agendar ASO
+    </a>
+    <div class="mob-contact-row"><i class="fa-solid fa-phone"></i>(21) 2042-8680</div>
+    <div class="mob-contact-row"><i class="fa-solid fa-envelope"></i>comercial@viamedmultisaude.com.br</div>
+    <div class="mob-socials">
+      <a href="https://wa.me/552120428680" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      <a href="https://www.facebook.com/ViaMedMultisaude/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="https://www.instagram.com/viamedmultisaude/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    </div>
+  </div>
+</nav>
+
+<style>
+.header {
+  position:sticky; top:0; z-index:200;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(0,0,0,.06);
+  transition:box-shadow .3s var(--ease);
+}
+.header.raised  { box-shadow:var(--sh-md) }
+.hinner { display:flex; align-items:center; justify-content:space-between; height:72px }
+.logo img { height:50px; width:auto }
+.nav-ul { display:flex; align-items:center; gap:4px; list-style:none }
+.nav-ul > li { position:relative }
+.nav-a {
+  font-family:var(--fh); font-size:14.5px; font-weight:500; color:var(--g600);
+  padding:8px 14px; border-radius:var(--rlg);
+  display:inline-flex; align-items:center; gap:6px; transition:.2s;
+}
+.nav-a:hover, .nav-a.on { color:var(--g900); background:var(--g100) }
+.ch { font-size:10px; transition:transform .3s var(--ease) }
+.has-drop:hover .ch { transform:rotate(180deg) }
+.drop {
+  position:absolute; top:calc(100% + 10px); left:-8px;
+  min-width:290px; background:#fff; border-radius:var(--r2xl);
+  box-shadow:var(--sh-xl); padding:8px; border:1px solid var(--g100);
+  opacity:0; visibility:hidden; transform:translateY(12px);
+  transition:.25s var(--ease);
+}
+.has-drop:hover .drop { opacity:1; visibility:visible; transform:none }
+.drop-a {
+  display:flex; align-items:center; gap:12px;
+  padding:11px 14px; border-radius:var(--rlg);
+  font-size:14px; font-weight:500; color:var(--g700); transition:.2s;
+}
+.drop-a:hover { background:var(--g50); color:var(--g900) }
+.drop-ic {
+  width:36px; height:36px; border-radius:var(--rmd);
+  background:var(--g100); color:var(--n800);
+  display:grid; place-items:center; font-size:14px; flex-shrink:0; transition:.2s;
+}
+.drop-a:hover .drop-ic { background:var(--n800); color:#fff }
+.ham {
+  display:none; background:none; border:none;
+  font-size:22px; color:var(--g800); cursor:pointer;
+  padding:8px; border-radius:var(--rmd); transition:.2s;
+}
+.ham:hover { background:var(--g100) }
+
+/* Mobile nav */
+.mob-nav {
+  position:fixed; inset:0; z-index:300; background:#fff;
+  transform:translateX(100%); transition:transform .42s var(--ease);
+  display:flex; flex-direction:column; overflow-y:auto;
+}
+.mob-nav.open { transform:none }
+.mob-top {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 24px; border-bottom:1px solid var(--g100);
+}
+.mob-top img { height:44px; width:auto }
+.mob-close {
+  background:var(--g100); border:none; width:42px; height:42px;
+  border-radius:50%; font-size:20px; color:var(--g700);
+  cursor:pointer; display:grid; place-items:center; transition:.2s;
+}
+.mob-close:hover { background:var(--g200) }
+.mob-links { padding:16px 24px; flex:1 }
+.mob-link {
+  display:flex; align-items:center; justify-content:space-between;
+  font-family:var(--fh); font-size:20px; font-weight:600; color:var(--g800);
+  padding:16px 0; border-bottom:1px solid var(--g100); transition:.2s;
+}
+.mob-link i { font-size:14px; color:var(--g400) }
+.mob-link:hover { color:var(--o500); padding-left:6px }
+.mob-sub { padding-left:16px }
+.mob-sub a {
+  display:block; font-size:15px; font-weight:400; color:var(--g500);
+  padding:10px 0; border-bottom:1px dashed var(--g100); transition:.2s;
+}
+.mob-sub a:hover { color:var(--o500) }
+.mob-footer { padding:24px; border-top:1px solid var(--g100); display:grid; gap:12px }
+.mob-contact-row { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--g600) }
+.mob-contact-row i { color:var(--n800); width:16px }
+.mob-socials { display:flex; gap:10px; margin-top:4px }
+.mob-socials a {
+  width:40px; height:40px; border-radius:50%; background:var(--g100);
+  color:var(--g600); display:grid; place-items:center; font-size:16px; transition:.2s;
+}
+.mob-socials a:hover { background:var(--n800); color:#fff }
+
+@media(max-width:768px) {
+  .nav-ul, .hinner .btn-secondary { display:none }
+  .ham { display:block }
+  .hinner { height:64px }
+  .logo img { height:42px }
+}
+</style>

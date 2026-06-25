@@ -1,0 +1,105 @@
+---
+const stats = [
+  { value: 500, suffix: '+', label: 'Empresas clientes' },
+  { value: 10,  suffix: '+', label: 'Anos de experiência' },
+  { value: 50,  suffix: '+', label: 'Profissionais especializados' },
+  { value: 100, suffix: '%', label: 'conformidade legal' },
+];
+---
+
+<section class="sec sec-dark" id="numeros">
+  <div class="w">
+    <div class="nums-head">
+      <span class="eyebrow nums-eyebrow" data-anim="up">Em números</span>
+      <h2 data-anim="up" data-delay="1">Resultados que falam por si</h2>
+    </div>
+    <div class="num-line" id="numLine"></div>
+    <div class="nums-grid">
+      {stats.map((s, i) => (
+        <div class="num-item" data-anim="blur" data-delay={i + 1}>
+          <span class="num-val" data-n={s.value} data-suffix={s.suffix}>0</span>
+          <span class="num-label">{s.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  let fired = false;
+
+  function runCounter() {
+    document.querySelectorAll('.num-val').forEach((el) => {
+      const target = parseInt((el as HTMLElement).dataset.n || '0');
+      const suffix = (el as HTMLElement).dataset.suffix || '+';
+      const steps = 60;
+      const interval = 1800 / steps;
+      let frame = 0;
+      (el as HTMLElement).textContent = '0' + suffix;
+      const t = setInterval(() => {
+        frame++;
+        const eased = 1 - Math.pow(1 - frame / steps, 3);
+        (el as HTMLElement).textContent = Math.round(eased * target) + suffix;
+        if (frame >= steps) {
+          (el as HTMLElement).textContent = target + suffix;
+          clearInterval(t);
+        }
+      }, interval);
+    });
+  }
+
+  const obs = new IntersectionObserver((entries) => {
+    if (!entries[0].isIntersecting || fired) return;
+    if (window.scrollY < 100) return;
+    fired = true;
+    setTimeout(runCounter, 350);
+  }, { threshold: 0.25 });
+
+  const sec = document.getElementById('numeros');
+  if (sec) obs.observe(sec);
+
+  // Line animation
+  const line = document.getElementById('numLine');
+  if (line) {
+    const obsLine = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) { line.classList.add('visible'); obsLine.disconnect(); }
+    }, { threshold: 0.5 });
+    obsLine.observe(line);
+  }
+})();
+</script>
+
+<style>
+.nums-head { text-align:center; margin-bottom:0 }
+.nums-head h2 { color:#fff }
+.nums-eyebrow { background:rgba(244,97,10,.2); border-color:rgba(244,97,10,.3); color:rgba(255,255,255,.9) }
+.num-line {
+  height:2px; background:linear-gradient(90deg,transparent,var(--o500) 50%,transparent);
+  margin:32px auto 48px; width:0; transition:width 1.2s var(--ease);
+}
+.num-line.visible { width:200px }
+.nums-grid { display:grid; grid-template-columns:repeat(4,1fr) }
+.num-item { padding:56px 32px; text-align:center; border-right:1px solid rgba(255,255,255,.07); transition:.3s }
+.num-item:last-child { border-right:none }
+.num-item:hover { background:rgba(255,255,255,.04) }
+.num-val {
+  font-family:var(--fh); font-size:clamp(48px,5.5vw,72px);
+  font-weight:900; letter-spacing:-3px; display:block; line-height:1; margin-bottom:12px;
+  background:linear-gradient(135deg,#fff 40%,rgba(255,255,255,.45));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.num-label { font-size:14px; color:rgba(255,255,255,.5); letter-spacing:.2px }
+@media(max-width:1024px) {
+  .nums-grid { grid-template-columns:repeat(2,1fr) }
+  .num-item { border-right:none; border-bottom:1px solid rgba(255,255,255,.07); padding:40px 24px }
+  .num-item:nth-child(odd) { border-right:1px solid rgba(255,255,255,.07) }
+}
+@media(max-width:768px) {
+  .num-val { font-size:42px; letter-spacing:-2px }
+  .num-line { margin-bottom:36px }
+}
+@media(max-width:480px) {
+  .num-val { font-size:36px }
+}
+</style>

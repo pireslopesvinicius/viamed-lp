@@ -1,0 +1,91 @@
+---
+const checks = [
+  'Vanguarda na proteção à vida do trabalhador e ao meio ambiente',
+  'Atendimento personalizado e flexível para cada realidade empresarial',
+  'Equipe multidisciplinar de médicos, engenheiros e especialistas',
+  'Conformidade total com NRs, E-Social e legislação vigente',
+];
+---
+
+<section class="sec-lg" id="sobre" style="background:var(--g50)">
+  <div class="w">
+    <div class="about-grid">
+      <div class="about-visual" data-anim="left">
+        <div class="float-badge-top">
+          <div class="fbt-ic"><i class="fa-solid fa-award"></i></div>
+          <div class="fbt-text">
+            <strong>Referência</strong>
+            <span>em saúde ocupacional</span>
+          </div>
+        </div>
+        <div class="about-frame">
+          <img src="/images/viamed-quemsomos.jpg" alt="Equipe ViaMed" width="600" height="750" loading="lazy" />
+        </div>
+        <div class="float-badge-bot">
+          <strong>+10</strong>
+          <span>anos de<br/>experiência</span>
+        </div>
+      </div>
+
+      <div class="about-text" data-anim="right">
+        <span class="eyebrow">Quem Somos</span>
+        <h2>A empresa que coloca a vida do trabalhador em primeiro lugar</h2>
+        <p>Somos determinados em flexibilizar nossa forma de trabalho para criar as soluções necessárias à sua empresa. Juntos evoluímos nos resultados e garantimos a conformidade legal do seu negócio.</p>
+        <div class="check-list stagger-children">
+          {checks.map(c => (
+            <div class="check-row" data-anim="left">
+              <div class="check-ico"><i class="fa-solid fa-check"></i></div>
+              <p>{c}</p>
+            </div>
+          ))}
+        </div>
+        <a href="#contato" class="btn btn-secondary btn-lg" data-anim="up">
+          Saiba Mais <i class="fa-solid fa-arrow-right arr"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center }
+.about-visual { position:relative }
+.about-frame { border-radius:var(--r3xl); overflow:hidden; box-shadow:var(--sh-xl); aspect-ratio:4/5 }
+.about-frame img { width:100%; height:100%; object-fit:cover; transition:transform .7s var(--ease) }
+.about-frame:hover img { transform:scale(1.04) }
+.float-badge-top {
+  position:absolute; top:24px; left:-24px; z-index:5;
+  background:#fff; border-radius:var(--rxl); padding:14px 20px;
+  box-shadow:var(--sh-lg); display:flex; align-items:center; gap:12px;
+  animation:float 4s ease-in-out infinite;
+}
+.fbt-ic { width:38px; height:38px; border-radius:var(--rmd); background:var(--n800); color:#fff; display:grid; place-items:center; font-size:16px }
+.fbt-text strong { font-family:var(--fh); font-size:14px; font-weight:700; color:var(--g900); display:block; line-height:1 }
+.fbt-text span { font-size:11px; color:var(--g500) }
+.float-badge-bot {
+  position:absolute; bottom:-24px; right:-24px;
+  background:var(--o500); color:#fff; border-radius:var(--r2xl); padding:26px 30px;
+  box-shadow:var(--sh-glow); text-align:center;
+  animation:floatR 5s ease-in-out infinite;
+}
+.float-badge-bot strong { font-family:var(--fh); font-size:46px; font-weight:900; display:block; line-height:1; letter-spacing:-2px }
+.float-badge-bot span { font-size:12px; opacity:.9; line-height:1.5; display:block; margin-top:4px }
+.about-text h2 { font-size:clamp(28px,3vw,42px); font-weight:700; margin-bottom:20px; letter-spacing:-.5px }
+.about-text > p { font-size:16px; line-height:1.85; margin-bottom:28px; color:var(--g600) }
+.check-list { display:grid; gap:14px; margin-bottom:32px }
+.check-row { display:flex; align-items:flex-start; gap:14px }
+.check-ico { width:26px; height:26px; border-radius:50%; background:var(--o50); color:var(--o500); display:grid; place-items:center; font-size:11px; flex-shrink:0; margin-top:2px }
+.check-row p { font-size:15px; line-height:1.65; color:var(--g700) }
+@media(max-width:1024px) {
+  .about-grid { grid-template-columns:1fr; gap:48px }
+  .about-visual { order:-1 }
+  .float-badge-top { left:12px }
+  .float-badge-bot { right:12px }
+}
+@media(max-width:768px) {
+  .about-frame { aspect-ratio:4/3 }
+  .float-badge-top { left:10px; top:16px; padding:10px 14px }
+  .float-badge-bot { right:10px; bottom:-16px; padding:18px 22px }
+  .float-badge-bot strong { font-size:34px }
+}
+</style>

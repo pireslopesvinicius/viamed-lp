@@ -1,0 +1,62 @@
+---
+const members = [
+  { img: '/images/dr.bruno_.jpg',       name: 'Dr. Bruno',       role: 'Médico do Trabalho' },
+  { img: '/images/dr.pedroicaro.jpeg',  name: 'Dr. Pedro Ícaro', role: 'Médico Ocupacional' },
+  { img: '/images/eng.diogoxavier.jpg', name: 'Eng. Diogo Xavier', role: 'Engenheiro de Segurança' },
+];
+---
+
+<section class="sec-lg" id="equipe">
+  <div class="w">
+    <div class="sh center">
+      <span class="eyebrow" data-anim="up">Nossa Equipe</span>
+      <h2 data-anim="up" data-delay="1">Profissionais que fazem<br/>a diferença</h2>
+      <p class="lead" data-anim="up" data-delay="2">Médicos, engenheiros e especialistas comprometidos com a excelência e com a vida do trabalhador.</p>
+    </div>
+    <div class="team-grid stagger-children">
+      {members.map(m => (
+        <div data-anim="scale">
+          <div class="team-card">
+            <div class="tc-photo">
+              <img src={m.img} alt={m.name} width="400" height="533" loading="lazy" />
+              <div class="tc-overlay">
+                <div class="tc-overlay-content"><span>{m.role}</span></div>
+              </div>
+            </div>
+            <div class="tc-info">
+              <h3>{m.name}</h3>
+              <span class="role">{m.role}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+.team-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px }
+.team-card {
+  background:#fff; border-radius:var(--r3xl); overflow:hidden;
+  border:1px solid var(--g100); box-shadow:var(--sh-sm);
+  transition:transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
+}
+.team-card:hover { transform:translateY(-10px); box-shadow:var(--sh-xl); border-color:transparent }
+.tc-photo { aspect-ratio:3/4; overflow:hidden; position:relative }
+.tc-photo img { width:100%; height:100%; object-fit:cover; object-position:top; transition:transform .6s var(--ease) }
+.team-card:hover .tc-photo img { transform:scale(1.07) }
+.tc-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(0,17,103,.75) 0%,transparent 50%);
+  opacity:0; transition:.4s var(--ease); display:flex; align-items:flex-end; padding:24px;
+}
+.team-card:hover .tc-overlay { opacity:1 }
+.tc-overlay-content { color:#fff; transform:translateY(10px); transition:.4s var(--ease) }
+.team-card:hover .tc-overlay-content { transform:none }
+.tc-overlay-content span { font-size:13px; opacity:.85 }
+.tc-info { padding:20px 24px 24px }
+.tc-info h3 { font-size:18px; font-weight:600; margin-bottom:3px }
+.tc-info .role { font-size:13px; color:var(--o500); font-weight:500 }
+@media(max-width:1024px) { .team-grid { grid-template-columns:repeat(2,1fr) } }
+@media(max-width:768px)  { .team-grid { grid-template-columns:1fr } .tc-photo { aspect-ratio:1/1 } }
+</style>

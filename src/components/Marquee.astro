@@ -1,0 +1,42 @@
+---
+const items = [
+  { icon: 'fa-shield-halved', label: 'Segurança Ocupacional' },
+  { icon: 'fa-anchor',        label: 'Soluções Marítimas' },
+  { icon: 'fa-laptop-code',   label: 'Gestão E-Social' },
+  { icon: 'fa-virus-slash',   label: 'Prevenção Covid-19' },
+  { icon: 'fa-user-doctor',   label: 'Medicina do Trabalho' },
+  { icon: 'fa-hard-hat',      label: 'NR-7 e NR-9' },
+  { icon: 'fa-file-medical',  label: 'PCMSO e PGR' },
+  { icon: 'fa-ship',          label: 'Offshore' },
+];
+---
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    {[...items, ...items].map((item, i) => (
+      <>
+        <span class="mi"><i class={`fa-solid ${item.icon}`}></i>{item.label}</span>
+        <span class="mi-dot" aria-hidden="true"></span>
+      </>
+    ))}
+  </div>
+</div>
+
+<style>
+.marquee-wrap {
+  border-top:1px solid var(--g200); border-bottom:1px solid var(--g200);
+  padding:18px 0; overflow:hidden; background:#fff;
+}
+.marquee-track {
+  display:flex; gap:40px; white-space:nowrap;
+  animation:marqueeL 28s linear infinite;
+}
+.marquee-track:hover { animation-play-state:paused }
+.mi {
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--fh); font-size:13.5px; font-weight:600;
+  color:var(--g400); flex-shrink:0;
+}
+.mi i { color:var(--g300); font-size:15px }
+.mi-dot { width:4px; height:4px; border-radius:50%; background:var(--g300); flex-shrink:0; align-self:center }
+</style>

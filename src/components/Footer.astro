@@ -1,0 +1,83 @@
+---
+const services = [
+  'Segurança Ocupacional',
+  'Marítimas e Offshore',
+  'Gestão E-Social',
+  'Prevenção Covid-19',
+];
+const nav = [
+  { href: '#inicio',   label: 'Home' },
+  { href: '#sobre',    label: 'Quem Somos' },
+  { href: '#equipe',   label: 'Nossa Equipe' },
+  { href: '#trabalhe', label: 'Trabalhe Conosco' },
+  { href: '#contato',  label: 'Contato' },
+];
+---
+
+<footer class="footer">
+  <div class="w">
+    <div class="footer-grid">
+      <div class="fb">
+        <img src="/images/viamed-multisaude-logo-white.png" alt="ViaMed Multisaúde" width="200" height="64" loading="lazy" />
+        <p>Nosso compromisso é estar na vanguarda da proteção à vida do trabalhador e ao meio ambiente.</p>
+        <div class="fsocials">
+          <a href="mailto:comercial@viamedmultisaude.com.br" aria-label="E-mail"><i class="fa-solid fa-envelope"></i></a>
+          <a href="https://wa.me/552120428680" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="https://www.facebook.com/ViaMedMultisaude/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/viamedmultisaude/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <div class="fc">
+        <h4>Serviços</h4>
+        <ul>
+          {services.map(s => <li><a href="#servicos">{s}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="fc">
+        <h4>Navegar</h4>
+        <ul>
+          {nav.map(l => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="fc">
+        <h4>Contato</h4>
+        <ul class="fc-contact">
+          <li><i class="fa-solid fa-phone"></i>(21) 2042-8680</li>
+          <li><i class="fa-solid fa-envelope"></i>comercial@viamedmultisaude.com.br</li>
+          <li><i class="fa-solid fa-location-dot"></i>Rio de Janeiro — RJ</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 ViaMed Multisaúde — Todos os direitos reservados</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+.footer { background:var(--g900); color:rgba(255,255,255,.55) }
+.footer-grid { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:48px; padding:80px 0 64px; border-bottom:1px solid rgba(255,255,255,.07) }
+.fb img { height:50px; width:auto; margin-bottom:22px }
+.fb p { font-size:14px; line-height:1.8; max-width:280px; margin-bottom:24px }
+.fsocials { display:flex; gap:10px }
+.fsocials a { width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.07); color:rgba(255,255,255,.55); display:grid; place-items:center; font-size:15px; transition:.25s }
+.fsocials a:hover { background:var(--o500); color:#fff; transform:scale(1.1) }
+.fc h4 { font-family:var(--fh); font-size:15px; font-weight:600; color:#fff; margin-bottom:20px }
+.fc ul { list-style:none }
+.fc li { margin-bottom:11px }
+.fc li a { font-size:14px; transition:.2s; display:inline-flex; align-items:center; gap:6px }
+.fc li a:hover { color:var(--o400); padding-left:5px }
+.fc-contact li { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; font-size:14px }
+.fc-contact li i { color:var(--o500); width:16px; flex-shrink:0; margin-top:3px }
+.footer-bottom { display:flex; justify-content:center; padding:22px 0; font-size:13px }
+@media(max-width:1024px) { .footer-grid { grid-template-columns:1fr 1fr; gap:36px } }
+@media(max-width:768px)  {
+  .footer-grid { grid-template-columns:1fr; gap:32px; padding:52px 0 40px }
+  .footer-bottom { flex-direction:column; text-align:center }
+  .fc-contact { display:none }
+}
+</style>
