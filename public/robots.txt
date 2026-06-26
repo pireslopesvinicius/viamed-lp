@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://viamedmultisaude.com.br/sitemap-index.xml
