@@ -29,14 +29,14 @@ const perks = [
         <h3>Envie seu currículo</h3>
         <form id="workForm" novalidate>
           <div class="frow">
-            <div class="field"><label>Nome completo <span class="req">*</span></label><input class="inp" type="text" required placeholder="Seu nome" /></div>
-            <div class="field"><label>E-mail <span class="req">*</span></label><input class="inp" type="email" required placeholder="seu@email.com" /></div>
+            <div class="field"><label>Nome completo <span class="req">*</span></label><input class="inp" type="text" name="nome" required placeholder="Seu nome" /></div>
+            <div class="field"><label>E-mail <span class="req">*</span></label><input class="inp" type="email" name="email" required placeholder="seu@email.com" /></div>
           </div>
           <div class="frow">
-            <div class="field"><label>Telefone <span class="req">*</span></label><input class="inp" type="tel" required placeholder="(21) 00000-0000" /></div>
+            <div class="field"><label>Telefone <span class="req">*</span></label><input class="inp" type="tel" name="telefone" inputmode="numeric" maxlength="14" required placeholder="(21) 00000-0000" /></div>
             <div class="field">
               <label>Área de interesse</label>
-              <select class="sel">
+              <select class="sel" name="assunto">
                 <option value="">Selecione...</option>
                 <option>Medicina do Trabalho</option>
                 <option>Engenharia de Segurança</option>
@@ -46,7 +46,7 @@ const perks = [
               </select>
             </div>
           </div>
-          <div class="field"><label>Mensagem</label><textarea class="txa" placeholder="Fale sobre você e sua experiência..."></textarea></div>
+          <div class="field"><label>Mensagem</label><textarea class="txa" name="mensagem" placeholder="Fale sobre você e sua experiência..."></textarea></div>
           <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center">
             Enviar Currículo <i class="fa-solid fa-paper-plane arr"></i>
           </button>
@@ -60,13 +60,36 @@ const perks = [
   </div>
 </section>
 
-<script>
-document.getElementById('workForm')?.addEventListener('submit', (e) => {
+<script is:inline>
+document.getElementById('workForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const form = e.target as HTMLFormElement;
+  const form = e.target;
   if (!form.checkValidity()) { form.reportValidity(); return; }
-  const ok = document.getElementById('workOk');
-  if (ok) { ok.style.display = 'block'; form.reset(); setTimeout(() => ok.style.display = 'none', 7000); }
+
+  const formData = new FormData(form);
+  const payload = {
+    nome: formData.get('nome'),
+    email: formData.get('email'),
+    telefone: formData.get('telefone'),
+    area: formData.get('assunto'),
+    mensagem: formData.get('mensagem'),
+  };
+
+  try {
+    const res = await fetch('https://yonnfmwlkbuoaqfkwvrg.supabase.co/functions/v1/salvar_curriculo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) {
+      const ok = document.getElementById('workOk');
+      if (ok) { ok.style.display = 'block'; form.reset(); setTimeout(() => ok.style.display = 'none', 7000); }
+    } else {
+      alert('Erro ao enviar. Tente novamente.');
+    }
+  } catch (err) {
+    alert('Erro na conexão. Tente novamente.');
+  }
 });
 </script>
 

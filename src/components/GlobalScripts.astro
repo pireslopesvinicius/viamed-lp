@@ -74,5 +74,23 @@
       });
     }, { passive: true });
   }
+
+  // Máscara de telefone — aplica a TODOS os inputs de telefone da página
+  function formatPhone(val: string) {
+    val = val.replace(/\D/g, '').slice(0, 11);
+    if (val.length >= 2) val = '(' + val.slice(0, 2) + ') ' + val.slice(2);
+    if (val.length >= 10) val = val.slice(0, 10) + '-' + val.slice(10);
+    return val;
+  }
+  document.querySelectorAll('input[name="telefone"]').forEach(input => {
+    input.addEventListener('keypress', (e: Event) => {
+      const ke = e as KeyboardEvent;
+      if (!/\d/.test(ke.key)) e.preventDefault();
+    });
+    input.addEventListener('input', (e: Event) => {
+      const t = e.target as HTMLInputElement;
+      t.value = formatPhone(t.value);
+    });
+  });
 })();
 </script>

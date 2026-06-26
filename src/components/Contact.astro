@@ -31,14 +31,14 @@ const infoCards = [
         <h3>Envie uma mensagem</h3>
         <form id="contactForm" novalidate>
           <div class="frow">
-            <div class="field"><label>Nome <span class="req">*</span></label><input class="inp" type="text" required placeholder="Seu nome" /></div>
-            <div class="field"><label>Telefone <span class="req">*</span></label><input class="inp" type="tel" required placeholder="(21) 00000-0000" /></div>
+            <div class="field"><label>Nome <span class="req">*</span></label><input class="inp" type="text" name="nome" required placeholder="Seu nome" /></div>
+            <div class="field"><label>Telefone <span class="req">*</span></label><input class="inp" type="tel" name="telefone" inputmode="numeric" maxlength="14" required placeholder="(21) 00000-0000" /></div>
           </div>
           <div class="frow">
-            <div class="field"><label>E-mail <span class="req">*</span></label><input class="inp" type="email" required placeholder="seu@email.com" /></div>
+            <div class="field"><label>E-mail <span class="req">*</span></label><input class="inp" type="email" name="email" required placeholder="seu@email.com" /></div>
             <div class="field">
               <label>Assunto</label>
-              <select class="sel">
+              <select class="sel" name="assunto">
                 <option value="">Selecione...</option>
                 <option>Orçamento</option>
                 <option>Agendar ASO</option>
@@ -48,7 +48,7 @@ const infoCards = [
               </select>
             </div>
           </div>
-          <div class="field"><label>Mensagem <span class="req">*</span></label><textarea class="txa" required placeholder="Como podemos ajudar?"></textarea></div>
+          <div class="field"><label>Mensagem <span class="req">*</span></label><textarea class="txa" name="mensagem" required placeholder="Como podemos ajudar?"></textarea></div>
           <button type="submit" class="btn btn-secondary btn-lg" style="width:100%;justify-content:center">
             Enviar Mensagem <i class="fa-solid fa-paper-plane arr"></i>
           </button>
@@ -62,13 +62,36 @@ const infoCards = [
   </div>
 </section>
 
-<script>
-document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+<script is:inline>
+document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const form = e.target as HTMLFormElement;
+  const form = e.target;
   if (!form.checkValidity()) { form.reportValidity(); return; }
-  const ok = document.getElementById('contactOk');
-  if (ok) { ok.style.display = 'block'; form.reset(); setTimeout(() => ok.style.display = 'none', 7000); }
+
+  const formData = new FormData(form);
+  const payload = {
+    nome: formData.get('nome'),
+    email: formData.get('email'),
+    telefone: formData.get('telefone'),
+    assunto: formData.get('assunto'),
+    mensagem: formData.get('mensagem'),
+  };
+
+  try {
+    const res = await fetch('https://yonnfmwlkbuoaqfkwvrg.supabase.co/functions/v1/salvar_lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) {
+      const ok = document.getElementById('contactOk');
+      if (ok) { ok.style.display = 'block'; form.reset(); setTimeout(() => ok.style.display = 'none', 7000); }
+    } else {
+      alert('Erro ao enviar. Tente novamente.');
+    }
+  } catch (err) {
+    alert('Erro na conexão. Tente novamente.');
+  }
 });
 </script>
 
